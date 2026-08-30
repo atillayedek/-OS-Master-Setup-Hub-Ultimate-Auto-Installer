@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="tr" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate OS Setup Hub (200+ Apps)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 550px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 280px;
+            max-height: 320px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
+        .scrollbar-none::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="h-full font-sans text-slate-800 antialiased flex flex-col">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center space-x-3 pointer-events-none border border-slate-700">
+        <span class="text-xl">✅</span>
+        <span id="toast-message" class="text-sm font-medium">Kopyalandı!</span>
+    </div>
+
+    <!-- Header Section -->
+    <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-30 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <span class="text-2xl">🐧</span>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight leading-tight text-white">OS Master Setup Hub</h1>
+                    <p class="text-xs text-slate-400">Dev Kütüphane (Kali, Ubuntu, DevOps, Ofis)</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="text-right hidden sm:block">
+                    <span class="text-xs text-slate-400 block">Seçilen Paketler</span>
+                    <span id="header-selected-count" class="text-sm font-bold text-teal-400">0 / 0 Paket</span>
+                </div>
+                <button onclick="scrollToScript()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-lg transition-colors flex items-center space-x-2 shadow-sm">
+                    <span>⚡ Scripti İncele</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-[90rem] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+        <!-- Introduction and Statistics -->
+        <section class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+            <div class="max-w-5xl">
+                <div class="flex flex-wrap gap-2 mb-3">
+                    <span class="px-2.5 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-xs font-bold">200+ Uygulama</span>
+                    <span class="px-2.5 py-1 bg-red-100 text-red-700 rounded-lg text-xs font-bold">🐉 Kali & Hacking Tools</span>
+                    <span class="px-2.5 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-bold">🚀 DevOps & Ağ</span>
+                    <span class="px-2.5 py-1 bg-emerald-100 text-emerald-700 rounded-lg text-xs font-bold">🟢 Noob</span>
+                    <span class="px-2.5 py-1 bg-amber-100 text-amber-700 rounded-lg text-xs font-bold">🟡 Medium</span>
+                    <span class="px-2.5 py-1 bg-rose-100 text-rose-700 rounded-lg text-xs font-bold">🔴 Pro</span>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-900 mb-2">Devasa Paket Yöneticisi ve Otomatik Kurulum Aracı</h2>
+                <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+                    Talep edilen sızma testi araçlarından (AFL++, Bloodhound, Impacket, CrackMapExec, FFUF vb.), sistem yöneticisi paketlerine (Samba, Bind9, OpenVPN, QEMU) ve günlük ofis/medya programlarına kadar tüm ihtiyaçlarınızı tek bir panelden seçip kendi özel Bash betiğinizi oluşturun.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-6 border-t border-slate-100">
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col justify-center">
+                    <span class="text-xs text-slate-500 font-medium block">Toplam Kütüphane</span>
+                    <span id="stat-total-apps" class="text-2xl font-extrabold text-slate-800 mt-1">0</span>
+                </div>
+                <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex flex-col justify-center">
+                    <span class="text-xs text-indigo-600 font-medium block">Seçilen Paketler</span>
+                    <span id="stat-selected-apps" class="text-2xl font-extrabold text-indigo-700 mt-1">0</span>
+                </div>
+                <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100 flex flex-col justify-center">
+                    <span class="text-xs text-emerald-600 font-medium block">Zorluk Dağılımı (N/M/P)</span>
+                    <span id="stat-level-breakdown" class="text-sm sm:text-base font-bold text-emerald-800 mt-1 block">0 / 0 / 0</span>
+                </div>
+                <div class="bg-amber-50 p-4 rounded-xl border border-amber-100 flex flex-col justify-center">
+                    <span class="text-xs text-amber-600 font-medium block">Tahmini İndirme Boyutu</span>
+                    <span id="stat-estimated-size" class="text-2xl font-extrabold text-amber-700 mt-1">~0 GB</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Charts -->
+        <section class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-slate-900">Kütüphane Dağılım Analizi</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="flex flex-col items-center w-full">
+                    <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-4 text-center">Kategoriye Göre Hacim</h4>
+                    <div class="chart-container"><canvas id="categoryChart"></canvas></div>
+                </div>
+                <div class="flex flex-col items-center w-full">
+                    <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-4 text-center">Deneyim Seviyesi Dağılımı</h4>
+                    <div class="chart-container"><canvas id="levelChart"></canvas></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filtering & Application Grid -->
+        <section class="space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="relative flex-1">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-sm">🔍</span>
+                        <input type="text" id="search-input" placeholder="Yüzlerce uygulama arasında ara (ör. docker, impacket, nmap, office)..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+                    </div>
+                    <div class="flex items-center space-x-1.5 overflow-x-auto pb-1" id="level-filter-container"></div>
+                    <div class="flex items-center space-x-2 flex-shrink-0">
+                        <button onclick="selectAllApps(true)" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold px-3 py-2 rounded-lg transition-colors">Görünenleri Seç</button>
+                        <button onclick="selectAllApps(false)" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium px-3 py-2 rounded-lg transition-colors">Temizle</button>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2 overflow-x-auto pt-2 pb-1 border-t border-slate-100 scrollbar-none" id="category-filter-container"></div>
+            </div>
+
+            <div id="apps-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <!-- App Cards Dynamically Injected Here -->
+            </div>
+        </section>
+
+        <!-- Script Output Area -->
+        <section id="script-section" class="bg-slate-900 rounded-2xl p-6 sm:p-8 shadow-xl border border-slate-800 text-slate-100 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xl">📜</span>
+                        <h3 class="text-lg font-bold text-white">Özel Oluşturulmuş Bash Betiği</h3>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">Seçtiğiniz paketlere göre anlık üretilen <code>install.sh</code> içeriği.</p>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button onclick="copyGeneratedScript()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs sm:text-sm px-4 py-2.5 rounded-xl transition-colors flex items-center space-x-2 shadow-sm">
+                        <span>📋 Kopyala</span>
+                    </button>
+                    <button onclick="downloadScriptFile()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-medium text-xs sm:text-sm px-4 py-2.5 rounded-xl transition-colors flex items-center space-x-2">
+                        <span>💾 .sh İndir</span>
+                    </button>
+                </div>
+            </div>
+            <div class="relative group">
+                <pre class="bg-slate-950 p-5 rounded-xl font-mono text-xs sm:text-sm text-emerald-400 overflow-x-auto max-h-[600px] custom-scrollbar leading-relaxed border border-slate-800" id="script-output"></pre>
+            </div>
+            <div class="bg-slate-800/60 rounded-xl p-4 border border-slate-700/50 flex items-start space-x-3 text-xs text-slate-300">
+                <span class="text-amber-400 text-lg">💡</span>
+                <p class="leading-relaxed">
+                    <strong>Nasıl Kullanılır:</strong> Dosyayı indirin ve terminalde çalıştırın: <br>
+                    <code class="bg-slate-900 text-amber-300 px-2 py-0.5 rounded font-mono mt-1 inline-block">chmod +x custom_install.sh && sudo ./custom_install.sh</code>
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Scripts & Master Dataset Logic -->
+    <script>
+        // MASSIVE DATASET
+        const appsData = [
+            // ==========================================
+            // KATEGORİ: SİBER GÜVENLİK & KALI TOOLS 
+            // ==========================================
+            { id: 'kali-afl', name: 'AFL++ (Fuzzer)', category: 'Siber Güvenlik (Kali)', level: 'Pro', method: 'APT', command: 'sudo apt install -y afl++', desc: 'Gelişmiş güvenlik açığı fuzzing (AFL++) framework\'ü.', icon: '🐛', selected: false, estMb: 120 },
+            { id: 'kali-amass', name: 'Amass', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'APT', command: 'sudo apt install -y amass', desc: 'Açık kaynak istihbaratı (OSINT) ve ağ haritalama.', icon: '🗺️', selected: true, estMb: 45 },
+            { id: 'kali-apktool', name: 'Apktool', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'APT', command: 'sudo apt install -y apktool', desc: 'Kapalı kaynak Android (APK) uygulamalarını tersine çevirme.', icon: '🤖', selected: false, estMb: 25 },
+            { id: 'kali-arpscan', name: 'Arp-Scan', category: 'Siber Güvenlik (Kali)', level: 'Noob', method: 'APT', command: 'sudo apt install -y arp-scan', desc: 'Yerel ağdaki (LAN) cihazları ARP paketleri ile tarama.', icon: '📡', selected: true, estMb: 10 },
+            { id: 'kali-assetfinder', name: 'Assetfinder', category: 'Siber Güvenlik (Kali)', level: 'Noob', method: 'APT', command: 'sudo apt install -y assetfinder', desc: 'Bir etki alanıyla ilgili alt alan adlarını (subdomains) bulur.', icon: '🔍', selected: true, estMb: 15 },
+            { id: 'kali-bloodhound', name: 'BloodHound', category: 'Siber Güvenlik (Kali)', level: 'Pro', method: 'APT', command: 'sudo apt install -y bloodhound', desc: 'Active Directory (AD) zafiyetlerini graf teorisiyle haritalama.', icon: '🩸', selected: false, estMb: 300 },
+            { id: 'kali-crackmapexec', name: 'CrackMapExec (Netexec)', category: 'Siber Güvenlik (Kali)', level: 'Pro', method: 'APT', command: 'sudo apt install -y crackmapexec', desc: 'Active Directory ağları için "İsviçre Çakısı" pentest aracı.', icon: '⚔️', selected: true, estMb: 150 },
+            { id: 'kali-dirsearch', name: 'Dirsearch', category: 'Siber Güvenlik (Kali)', level: 'Noob', method: 'APT', command: 'sudo apt install -y dirsearch', desc: 'Hızlı ve gelişmiş web sunucusu dizin/dosya tarayıcısı.', icon: '📂', selected: true, estMb: 20 },
+            { id: 'kali-ffuf', name: 'FFUF (Fuzz Faster)', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'APT', command: 'sudo apt install -y ffuf', desc: 'Go ile yazılmış çok hızlı web fuzzer aracı.', icon: '🚀', selected: true, estMb: 15 },
+            { id: 'kali-impacket', name: 'Impacket Scripts', category: 'Siber Güvenlik (Kali)', level: 'Pro', method: 'APT', command: 'sudo apt install -y impacket-scripts python3-impacket', desc: 'Ağ protokolleri ile çalışmak ve saldırmak için Python sınıfı.', icon: '🐍', selected: true, estMb: 85 },
+            { id: 'kali-nuclei', name: 'Nuclei', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'APT', command: 'sudo apt install -y nuclei', desc: 'Şablon tabanlı (template-based) hedef odaklı zafiyet tarayıcısı.', icon: '☢️', selected: true, estMb: 60 },
+            { id: 'kali-responder', name: 'Responder', category: 'Siber Güvenlik (Kali)', level: 'Pro', method: 'APT', command: 'sudo apt install -y responder', desc: 'LLMNR, NBT-NS ve MDNS zehirleyici (poisoner).', icon: '🎧', selected: true, estMb: 40 },
+            { id: 'kali-reconng', name: 'Recon-ng', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'APT', command: 'sudo apt install -y recon-ng', desc: 'Metasploit benzeri arayüze sahip kapsamlı OSINT framework.', icon: '🕵️', selected: false, estMb: 25 },
+            { id: 'kali-subfinder', name: 'Subfinder', category: 'Siber Güvenlik (Kali)', level: 'Noob', method: 'APT', command: 'sudo apt install -y subfinder', desc: 'Pasif çevrimiçi kaynakları kullanarak alt alan (subdomain) keşfi.', icon: '🌍', selected: true, estMb: 20 },
+            { id: 'kali-seclists', name: 'SecLists', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'APT', command: 'sudo apt install -y seclists', desc: 'Penetrasyon testleri için kelime listeleri (wordlists) arşivi.', icon: '📖', selected: false, estMb: 800 },
+            { id: 'kali-nmap', name: 'Nmap & Zenmap', category: 'Siber Güvenlik (Kali)', level: 'Noob', method: 'APT', command: 'sudo apt install -y nmap zenmap', desc: 'Ağ keşfi ve güvenlik denetimi için endüstri standardı tarayıcı.', icon: '👁️', selected: true, estMb: 40 },
+            { id: 'kali-wireshark', name: 'Wireshark & Tshark', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'APT', command: 'sudo apt install -y wireshark tshark', desc: 'Ağ protokolü analizörü ve paket yakalayıcı.', icon: '🦈', selected: true, estMb: 110 },
+            { id: 'kali-metasploit', name: 'Metasploit Framework', category: 'Siber Güvenlik (Kali)', level: 'Pro', method: 'Script', command: 'curl -sL https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb | sudo bash', desc: 'Dünyanın en çok kullanılan sızma testi (pentest) framework\'ü.', icon: '💣', selected: true, estMb: 650 },
+            { id: 'kali-burpsuite', name: 'Burp Suite', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'Snap', command: 'sudo snap install burpsuite', desc: 'Web uygulaması güvenlik testi platformu.', icon: '🕷️', selected: true, estMb: 480 },
+            { id: 'kali-sqlmap', name: 'SQLMap', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'APT', command: 'sudo apt install -y sqlmap', desc: 'Otomatik SQL injection ve veritabanı ele geçirme aracı.', icon: '💉', selected: true, estMb: 35 },
+            { id: 'kali-john', name: 'John the Ripper', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'APT', command: 'sudo apt install -y john', desc: 'Gelişmiş çevrimdışı şifre kırma (password cracker) aracı.', icon: '🗝️', selected: true, estMb: 50 },
+            { id: 'kali-hashcat', name: 'Hashcat', category: 'Siber Güvenlik (Kali)', level: 'Pro', method: 'APT', command: 'sudo apt install -y hashcat hashcat-utils', desc: 'Dünyanın en hızlı GPU tabanlı şifre kırıcısı.', icon: '🐈', selected: false, estMb: 80 },
+            { id: 'kali-aircrack', name: 'Aircrack-ng', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'APT', command: 'sudo apt install -y aircrack-ng', desc: 'Wi-Fi ağı güvenliği değerlendirme ve kırma seti.', icon: '📡', selected: true, estMb: 45 },
+            { id: 'kali-hydra', name: 'Hydra', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'APT', command: 'sudo apt install -y hydra hydra-gtk', desc: 'Hızlı ağ oturum açma kaba kuvvet (bruteforce) kırıcı.', icon: '🐉', selected: false, estMb: 30 },
+            { id: 'kali-gobuster', name: 'Gobuster', category: 'Siber Güvenlik (Kali)', level: 'Noob', method: 'APT', command: 'sudo apt install -y gobuster', desc: 'URI (dizin/dosya) ile DNS alt alan adı keşif aracı.', icon: '👻', selected: true, estMb: 20 },
+            { id: 'kali-dirb', name: 'Dirb & Dirbuster', category: 'Siber Güvenlik (Kali)', level: 'Noob', method: 'APT', command: 'sudo apt install -y dirb dirbuster', desc: 'Gizli dizinleri tarama ve bulma araçları.', icon: '📂', selected: false, estMb: 25 },
+            { id: 'kali-nikto', name: 'Nikto Web Tarayıcı', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'APT', command: 'sudo apt install -y nikto', desc: 'Kapsamlı web sunucusu zafiyet tarayıcısı.', icon: '☢️', selected: false, estMb: 15 },
+            { id: 'kali-wpscan', name: 'WPScan', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'Ruby', command: 'sudo apt install -y ruby-full build-essential && sudo gem install wpscan', desc: 'WordPress güvenlik açığı tarayıcısı.', icon: '🇼', selected: true, estMb: 90 },
+            { id: 'kali-ghidra', name: 'Ghidra', category: 'Siber Güvenlik (Kali)', level: 'Pro', method: 'APT', command: 'sudo apt install -y ghidra', desc: 'Tersine Mühendislik (SRE) analiz aracı.', icon: '🐲', selected: false, estMb: 380 },
+            { id: 'kali-radare2', name: 'Radare2', category: 'Siber Güvenlik (Kali)', level: 'Pro', method: 'APT', command: 'sudo apt install -y radare2', desc: 'Unix benzeri gelişmiş tersine mühendislik framework\'ü.', icon: '🔧', selected: false, estMb: 45 },
+            { id: 'kali-autopsy', name: 'Autopsy & Sleuth Kit', category: 'Siber Güvenlik (Kali)', level: 'Pro', method: 'APT', command: 'sudo apt install -y autopsy sleuthkit', desc: 'Adli bilişim (Forensics) için dijital kanıt analiz.', icon: '🔎', selected: false, estMb: 120 },
+            { id: 'kali-binwalk', name: 'Binwalk', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'APT', command: 'sudo apt install -y binwalk', desc: 'Gömülü cihaz firmware analizi ve çıkarma.', icon: '🚶', selected: true, estMb: 20 },
+            { id: 'kali-bettercap', name: 'Bettercap', category: 'Siber Güvenlik (Kali)', level: 'Pro', method: 'APT', command: 'sudo apt install -y bettercap', desc: 'WiFi, Bluetooth, ağ MITM saldırı aracı.', icon: '🧢', selected: false, estMb: 40 },
+            { id: 'kali-maltego', name: 'Maltego', category: 'Siber Güvenlik (Kali)', level: 'Pro', method: 'DEB', command: 'wget https://maltego-downloads.s3.us-east-2.amazonaws.com/linux/Maltego.v4.6.0.deb && sudo apt install -y ./Maltego.v4.6.0.deb && rm Maltego.v4.6.0.deb', desc: 'OSINT veri madenciliği ve görselleştirme.', icon: '🕵️', selected: false, estMb: 250 },
+            { id: 'kali-cewl', name: 'CeWL (Wordlist Generator)', category: 'Siber Güvenlik (Kali)', level: 'Noob', method: 'APT', command: 'sudo apt install -y cewl', desc: 'Hedef siteyi tarayıp özel şifre kelime listesi oluşturur.', icon: '🕸️', selected: false, estMb: 15 },
+            { id: 'kali-netcat', name: 'Netcat / Ncat', category: 'Siber Güvenlik (Kali)', level: 'Noob', method: 'APT', command: 'sudo apt install -y netcat-traditional ncat', desc: 'TCP/IP İsviçre Çakısı.', icon: '🇨', selected: true, estMb: 10 },
+            { id: 'kali-socat', name: 'Socat', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'APT', command: 'sudo apt install -y socat', desc: 'Çok amaçlı röle ve gelişmiş ağ yönlendirme.', icon: '🔁', selected: true, estMb: 10 },
+            { id: 'kali-zap', name: 'OWASP ZAP', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'Snap', command: 'sudo snap install zaproxy --classic', desc: 'Web güvenlik zafiyet tarayıcısı.', icon: '⚡', selected: true, estMb: 280 },
+            { id: 'kali-snort', name: 'Snort IDS', category: 'Siber Güvenlik (Kali)', level: 'Pro', method: 'APT', command: 'sudo apt install -y snort', desc: 'Ağ Saldırı Tespit (IDS) sistemi.', icon: '🐷', selected: false, estMb: 70 },
+            { id: 'kali-tcpdump', name: 'Tcpdump', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'APT', command: 'sudo apt install -y tcpdump', desc: 'Komut satırı ağ trafiği paket analizi.', icon: '🚦', selected: true, estMb: 12 },
+            { id: 'kali-macchanger', name: 'Macchanger', category: 'Siber Güvenlik (Kali)', level: 'Noob', method: 'APT', command: 'sudo apt install -y macchanger', desc: 'Ağ arayüz MAC adresini değiştirmek (spoofing).', icon: '🎭', selected: true, estMb: 10 },
+            { id: 'kali-proxychains', name: 'Proxychains', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'APT', command: 'sudo apt install -y proxychains4', desc: 'Bağlantıları proxy zincirlerinden geçirir.', icon: '🔗', selected: true, estMb: 10 },
+            { id: 'kali-kismet', name: 'Kismet', category: 'Siber Güvenlik (Kali)', level: 'Pro', method: 'APT', command: 'sudo apt install -y kismet', desc: 'Kablosuz ağ sniffer ve IDS.', icon: '📻', selected: false, estMb: 45 },
+            { id: 'kali-steghide', name: 'Steghide & Stegosuite', category: 'Siber Güvenlik (Kali)', level: 'Medium', method: 'APT', command: 'sudo apt install -y steghide stegosuite', desc: 'Resim veya ses içine veri gizleme (steganografi).', icon: '🖼️', selected: false, estMb: 25 },
+            
+            // ==========================================
+            // KATEGORİ: ÜRÜN YAYINLAMA, DEVOPS & AĞ 
+            // ==========================================
+            { id: 'devops-docker', name: 'Docker Engine', category: 'Ürün Yayınlama & DevOps', level: 'Medium', method: 'APT', command: 'sudo apt install -y docker.io && sudo systemctl enable --now docker && sudo usermod -aG docker $USER', desc: 'Uygulamaları konteynerleştirerek izole yayınlama ortamı.', icon: '🐳', selected: true, estMb: 400 },
+            { id: 'devops-dockercompose', name: 'Docker Compose', category: 'Ürün Yayınlama & DevOps', level: 'Medium', method: 'APT', command: 'sudo apt install -y docker-compose', desc: 'Çoklu Docker konteyner mimarilerini yönetme.', icon: '🐙', selected: true, estMb: 50 },
+            { id: 'devops-kubectl', name: 'Kubernetes CLI (kubectl)', category: 'Ürün Yayınlama & DevOps', level: 'Pro', method: 'Snap', command: 'sudo snap install kubectl --classic', desc: 'K8s kümelerini yönetmek için terminal aracı.', icon: '☸️', selected: true, estMb: 100 },
+            { id: 'devops-minikube', name: 'Minikube', category: 'Ürün Yayınlama & DevOps', level: 'Medium', method: 'Snap', command: 'sudo snap install minikube', desc: 'Yerel tek düğümlü K8s kümesi.', icon: '🚢', selected: false, estMb: 150 },
+            { id: 'devops-helm', name: 'Helm', category: 'Ürün Yayınlama & DevOps', level: 'Pro', method: 'Snap', command: 'sudo snap install helm --classic', desc: 'Kubernetes için paket yöneticisi.', icon: '⛑️', selected: false, estMb: 60 },
+            { id: 'devops-terraform', name: 'Terraform', category: 'Ürün Yayınlama & DevOps', level: 'Pro', method: 'Snap', command: 'sudo snap install terraform --classic', desc: 'Kod olarak altyapı (IaC).', icon: '🏗️', selected: true, estMb: 90 },
+            { id: 'devops-ansible', name: 'Ansible', category: 'Ürün Yayınlama & DevOps', level: 'Medium', method: 'APT', command: 'sudo apt install -y ansible', desc: 'Sunucu konfigürasyon yönetimi ve otomasyon.', icon: '🅰️', selected: true, estMb: 110 },
+            { id: 'devops-nginx', name: 'Nginx Web Server', category: 'Ürün Yayınlama & DevOps', level: 'Noob', method: 'APT', command: 'sudo apt install -y nginx', desc: 'Web ve Reverse Proxy (Ters Vekil) sunucusu.', icon: '🌐', selected: true, estMb: 35 },
+            { id: 'devops-apache2', name: 'Apache2 Web Server', category: 'Ürün Yayınlama & DevOps', level: 'Noob', method: 'APT', command: 'sudo apt install -y apache2 apache2-utils', desc: 'Klasik web ve uygulama sunucusu.', icon: '🪶', selected: false, estMb: 45 },
+            { id: 'devops-certbot', name: 'Certbot (Let\'s Encrypt)', category: 'Ürün Yayınlama & DevOps', level: 'Medium', method: 'APT', command: 'sudo apt install -y certbot python3-certbot-nginx python3-certbot-apache', desc: 'SSL/TLS sertifikası alma ve kurma.', icon: '🔒', selected: true, estMb: 50 },
+            { id: 'devops-pm2', name: 'PM2 Process Manager', category: 'Ürün Yayınlama & DevOps', level: 'Medium', method: 'NPM', command: 'sudo apt install -y npm && sudo npm install pm2 -g', desc: 'Node.js Production işlem yöneticisi.', icon: '⚙️', selected: true, estMb: 40 },
+            { id: 'devops-awscli', name: 'AWS CLI', category: 'Ürün Yayınlama & DevOps', level: 'Medium', method: 'Snap', command: 'sudo snap install aws-cli --classic', desc: 'Amazon Web Services yönetimi.', icon: '☁️', selected: true, estMb: 120 },
+            { id: 'devops-gcloud', name: 'Google Cloud CLI', category: 'Ürün Yayınlama & DevOps', level: 'Medium', method: 'Snap', command: 'sudo snap install google-cloud-cli --classic', desc: 'GCP bulut servisleri terminal aracı.', icon: '⛅', selected: false, estMb: 140 },
+            { id: 'devops-azurecli', name: 'Azure CLI', category: 'Ürün Yayınlama & DevOps', level: 'Medium', method: 'Script', command: 'curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash', desc: 'Microsoft Azure bulut kaynak yönetimi.', icon: '🟦', selected: false, estMb: 150 },
+            { id: 'devops-gh', name: 'GitHub CLI (gh) & Git', category: 'Ürün Yayınlama & DevOps', level: 'Noob', method: 'APT', command: 'sudo apt install -y git gh', desc: 'Git ve Terminal üzerinden GitHub yönetimi.', icon: '🐙', selected: true, estMb: 45 },
+            { id: 'devops-qemu', name: 'QEMU & KVM', category: 'Ürün Yayınlama & DevOps', level: 'Pro', method: 'APT', command: 'sudo apt install -y qemu-system qemu-utils libvirt-daemon-system libvirt-clients bridge-utils virt-manager', desc: 'Gelişmiş donanım sanallaştırma ve VM emülasyon aracı.', icon: '🖥️', selected: false, estMb: 280 },
+            { id: 'devops-vagrant', name: 'Vagrant', category: 'Ürün Yayınlama & DevOps', level: 'Medium', method: 'APT', command: 'sudo apt install -y vagrant', desc: 'Tekrar üretilebilir VM geliştirme ortamları.', icon: '📦', selected: false, estMb: 120 },
+            { id: 'devops-packer', name: 'Packer', category: 'Ürün Yayınlama & DevOps', level: 'Pro', method: 'APT', command: 'curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - && sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" && sudo apt update && sudo apt install packer', desc: 'Otomatik makine imajı oluşturucu.', icon: '🧳', selected: false, estMb: 110 },
+            { id: 'devops-prometheus', name: 'Prometheus', category: 'Ürün Yayınlama & DevOps', level: 'Pro', method: 'APT', command: 'sudo apt install -y prometheus', desc: 'Sistem izleme ve uyarı veritabanı.', icon: '🔥', selected: false, estMb: 80 },
+            { id: 'devops-grafana', name: 'Grafana', category: 'Ürün Yayınlama & DevOps', level: 'Medium', method: 'APT', command: 'sudo apt install -y apt-transport-https software-properties-common wget && wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add - && echo "deb https://packages.grafana.com/oss/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list && sudo apt update && sudo apt install grafana', desc: 'Sistem metriklerini ve loglarını görselleştirme.', icon: '📊', selected: true, estMb: 130 },
+
+            // ==========================================
+            // KATEGORİ: SİSTEM, AĞ & DISTRO ARAÇLARI 
+            // ==========================================
+            { id: 'sys-7zip', name: '7-Zip (7z, 7za)', category: 'Sistem, Ağ & Distro', level: 'Noob', method: 'APT', command: 'sudo apt install -y p7zip-full p7zip-rar', desc: 'Yüksek oranda sıkıştırma sağlayan arşiv aracı.', icon: '🗜️', selected: true, estMb: 15 },
+            { id: 'sys-curl-wget', name: 'Curl & Wget', category: 'Sistem, Ağ & Distro', level: 'Noob', method: 'APT', command: 'sudo apt install -y curl wget', desc: 'Komut satırından dosya indirme/istek atma araçları.', icon: '📥', selected: true, estMb: 5 },
+            { id: 'sys-bind9', name: 'Bind9 Utils (dig, nslookup)', category: 'Sistem, Ağ & Distro', level: 'Medium', method: 'APT', command: 'sudo apt install -y bind9-dnsutils bind9-host', desc: 'DNS sorgulama ve analiz araçları (dig, host vb).', icon: '🌐', selected: true, estMb: 10 },
+            { id: 'sys-clamav', name: 'ClamAV (Antivirus)', category: 'Sistem, Ağ & Distro', level: 'Medium', method: 'APT', command: 'sudo apt install -y clamav clamav-daemon', desc: 'Açık kaynak komut satırı antivirüs motoru.', icon: '🦠', selected: false, estMb: 250 },
+            { id: 'sys-dos2unix', name: 'Dos2Unix', category: 'Sistem, Ağ & Distro', level: 'Noob', method: 'APT', command: 'sudo apt install -y dos2unix', desc: 'Windows/Linux (CRLF/LF) satır sonu formatlarını dönüştürür.', icon: '🔄', selected: true, estMb: 5 },
+            { id: 'sys-lvm2', name: 'LVM2 (Logical Volume M.)', category: 'Sistem, Ağ & Distro', level: 'Pro', method: 'APT', command: 'sudo apt install -y lvm2', desc: 'Diskleri mantıksal birimlere bölme aracı (pv, vg, lv).', icon: '💽', selected: false, estMb: 15 },
+            { id: 'sys-nfs', name: 'NFS Common', category: 'Sistem, Ağ & Distro', level: 'Medium', method: 'APT', command: 'sudo apt install -y nfs-common', desc: 'Network File System paylaşımlarına bağlanmak için istemci.', icon: '📂', selected: false, estMb: 10 },
+            { id: 'sys-samba', name: 'Samba Server & Client', category: 'Sistem, Ağ & Distro', level: 'Medium', method: 'APT', command: 'sudo apt install -y samba smbclient cifs-utils', desc: 'Windows ağlarıyla dosya/yazıcı paylaşım entegrasyonu.', icon: '📁', selected: true, estMb: 60 },
+            { id: 'sys-openssh', name: 'OpenSSH Server', category: 'Sistem, Ağ & Distro', level: 'Medium', method: 'APT', command: 'sudo apt install -y openssh-server', desc: 'Cihazınıza uzaktan güvenli SSH bağlantısı açar.', icon: '🔑', selected: true, estMb: 15 },
+            { id: 'sys-openvpn', name: 'OpenVPN', category: 'Sistem, Ağ & Distro', level: 'Medium', method: 'APT', command: 'sudo apt install -y openvpn', desc: 'Güvenli tünelleme ve VPN bağlantıları kurmak için.', icon: '🛡️', selected: true, estMb: 12 },
+            { id: 'sys-screen-tmux', name: 'Screen & Tmux', category: 'Sistem, Ağ & Distro', level: 'Medium', method: 'APT', command: 'sudo apt install -y screen tmux', desc: 'Terminal oturumlarını arka plana alma ve çoklu pencere.', icon: '🪟', selected: true, estMb: 15 },
+            { id: 'sys-freerdp', name: 'FreeRDP (xfreerdp)', category: 'Sistem, Ağ & Distro', level: 'Medium', method: 'APT', command: 'sudo apt install -y freerdp3-x11', desc: 'Windows Uzak Masaüstü (RDP) protokolü istemcisi.', icon: '🖥️', selected: false, estMb: 25 },
+            { id: 'sys-update', name: 'Sistem Güncellemesi', category: 'Sistem, Ağ & Distro', level: 'Noob', method: 'APT', command: 'sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y', desc: 'Debian/Ubuntu tabanında tüm depoları günceller.', icon: '🔄', selected: true, estMb: 150 },
+            { id: 'sys-ubuntu-extras', name: 'Ubuntu Restricted Extras', category: 'Sistem, Ağ & Distro', level: 'Noob', method: 'APT', command: 'sudo apt install -y ubuntu-restricted-extras', desc: 'Gerekli MP3, Microsoft Font paketleri.', icon: '🧩', selected: true, estMb: 80 },
+            { id: 'sys-timeshift', name: 'Timeshift', category: 'Sistem, Ağ & Distro', level: 'Medium', method: 'APT', command: 'sudo apt install -y timeshift', desc: 'Sistemin anlık kopyasını alarak bozulmalarda kurtarma sağlar.', icon: '🛡️', selected: true, estMb: 35 },
+            { id: 'sys-htop', name: 'Htop & Btop', category: 'Sistem, Ağ & Distro', level: 'Noob', method: 'APT', command: 'sudo apt install -y htop btop', desc: 'Terminal içi görsel RAM/CPU izleme.', icon: '📈', selected: true, estMb: 20 },
+
+            // ==========================================
+            // KATEGORİ: YAPAY ZEKA & GELİŞTİRME
+            // ==========================================
+            { id: 'dev-vscode', name: 'VS Code', category: 'Yapay Zeka & Geliştirme', level: 'Noob', method: 'Snap', command: 'sudo snap install code --classic', desc: 'Microsoft gelişmiş modüler kod editörü.', icon: '💻', selected: true, estMb: 300 },
+            { id: 'dev-cursor', name: 'Cursor AI IDE', category: 'Yapay Zeka & Geliştirme', level: 'Medium', method: 'AppImage', command: 'mkdir -p ~/Cursor && cd ~/Cursor && curl -fsSL https://downloader.cursor.sh/linux/appImage/x64 -o cursor.AppImage && chmod +x cursor.AppImage', desc: 'Yerleşik AI odaklı gelişmiş editör.', icon: '⚡', selected: true, estMb: 180 },
+            { id: 'dev-ollama', name: 'Ollama (Yerel LLM)', category: 'Yapay Zeka & Geliştirme', level: 'Pro', method: 'Script', command: 'curl -fsSL https://ollama.com/install.sh | sh', desc: 'Yerel Llama 3, Mistral AI modellerini çalıştırın.', icon: '🦙', selected: true, estMb: 500 },
+            { id: 'dev-python-full', name: 'Python 3, Pip & Venv', category: 'Yapay Zeka & Geliştirme', level: 'Noob', method: 'APT', command: 'sudo apt install -y python3 python3-pip python3-venv ipython3', desc: 'Python 3 geliştirme ortamı, sanal alanlar.', icon: '🐍', selected: true, estMb: 120 },
+            { id: 'dev-nodejs', name: 'Node.js & NPM', category: 'Yapay Zeka & Geliştirme', level: 'Noob', method: 'APT', command: 'sudo apt install -y nodejs npm', desc: 'JavaScript çalışma ortamı ve paket yöneticisi.', icon: '🟢', selected: true, estMb: 180 },
+            { id: 'dev-golang', name: 'Go (Golang)', category: 'Yapay Zeka & Geliştirme', level: 'Medium', method: 'APT', command: 'sudo apt install -y golang-go', desc: 'Google tarafından geliştirilen sistem dili.', icon: '🐹', selected: false, estMb: 320 },
+            { id: 'dev-cpp', name: 'C / C++ Build Tools', category: 'Yapay Zeka & Geliştirme', level: 'Medium', method: 'APT', command: 'sudo apt install -y build-essential cmake gdb clang', desc: 'GCC, G++, CMake, GDB derleyicileri.', icon: '⚙️', selected: true, estMb: 350 },
+            { id: 'dev-dbeaver', name: 'DBeaver Community', category: 'Yapay Zeka & Geliştirme', level: 'Medium', method: 'Snap', command: 'sudo snap install dbeaver-ce', desc: 'SQL/NoSQL veritabanları için görsel yönetim.', icon: '🦫', selected: true, estMb: 150 },
+            { id: 'dev-sqlite', name: 'SQLite Browser', category: 'Yapay Zeka & Geliştirme', level: 'Noob', method: 'APT', command: 'sudo apt install -y sqlitebrowser', desc: 'SQLite veritabanları için hafif GUI aracı.', icon: '🗃️', selected: true, estMb: 40 },
+            { id: 'dev-postman', name: 'Postman', category: 'Yapay Zeka & Geliştirme', level: 'Medium', method: 'Snap', command: 'sudo snap install postman', desc: 'REST/GraphQL API geliştirme/test aracı.', icon: '🚀', selected: true, estMb: 220 },
+
+            // ==========================================
+            // KATEGORİ: VERİMLİLİK & OFİS ARAÇLARI
+            // ==========================================
+            { id: 'office-libreoffice', name: 'LibreOffice Suite', category: 'Verimlilik & Ofis', level: 'Noob', method: 'APT', command: 'sudo apt install -y libreoffice', desc: 'Eksiksiz açık kaynak ofis paketi.', icon: '📄', selected: true, estMb: 500 },
+            { id: 'office-obsidian', name: 'Obsidian', category: 'Verimlilik & Ofis', level: 'Medium', method: 'Snap', command: 'sudo snap install obsidian --classic', desc: 'Markdown tabanlı bağlantılı not alma aracı.', icon: '💎', selected: true, estMb: 140 },
+            { id: 'office-notion', name: 'Notion (Snap)', category: 'Verimlilik & Ofis', level: 'Noob', method: 'Snap', command: 'sudo snap install notion-snap', desc: 'Hepsi bir arada çalışma alanı.', icon: '📓', selected: true, estMb: 150 },
+            { id: 'office-thunderbird', name: 'Thunderbird', category: 'Verimlilik & Ofis', level: 'Noob', method: 'APT', command: 'sudo apt install -y thunderbird', desc: 'Mozilla yapımı e-posta ve takvim.', icon: '📧', selected: true, estMb: 95 },
+            { id: 'office-okular', name: 'Okular PDF Reader', category: 'Verimlilik & Ofis', level: 'Noob', method: 'APT', command: 'sudo apt install -y okular', desc: 'KDE tabanlı evrensel belge görüntüleyici.', icon: '📖', selected: true, estMb: 60 },
+            { id: 'office-gnucash', name: 'GnuCash', category: 'Verimlilik & Ofis', level: 'Medium', method: 'APT', command: 'sudo apt install -y gnucash', desc: 'Kişisel ve küçük işletme muhasebe aracı.', icon: '💰', selected: false, estMb: 80 },
+            { id: 'office-keepassxc', name: 'KeePassXC', category: 'Verimlilik & Ofis', level: 'Noob', method: 'APT', command: 'sudo apt install -y keepassxc', desc: 'Yerel, şifreli güvenli parola kasası.', icon: '🔑', selected: true, estMb: 45 },
+            { id: 'office-flameshot', name: 'Flameshot', category: 'Verimlilik & Ofis', level: 'Noob', method: 'APT', command: 'sudo apt install -y flameshot', desc: 'Ok, kutu destekli ekran görüntüsü alma.', icon: '📸', selected: true, estMb: 25 },
+            { id: 'office-anydesk', name: 'AnyDesk', category: 'Verimlilik & Ofis', level: 'Noob', method: 'DEB', command: 'wget -qO - https://keys.anydesk.com/repos/DEB-GPG-KEY | sudo apt-key add - && echo "deb http://deb.anydesk.com/ all main" | sudo tee /etc/apt/sources.list.d/anydesk-stable.list && sudo apt update && sudo apt install anydesk', desc: 'Hızlı uzak masaüstü bağlantısı.', icon: '🖥️', selected: true, estMb: 50 },
+
+            // ==========================================
+            // KATEGORİ: TARAYICI & MEDYA
+            // ==========================================
+            { id: 'media-chrome', name: 'Google Chrome', category: 'Medya & Tarayıcı', level: 'Noob', method: 'DEB', command: 'wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo apt install -y ./google-chrome-stable_current_amd64.deb && rm google-chrome-stable_current_amd64.deb', desc: 'Dünyanın en çok kullanılan tarayıcısı.', icon: '🌐', selected: true, estMb: 100 },
+            { id: 'media-tor', name: 'Tor Browser', category: 'Medya & Tarayıcı', level: 'Pro', method: 'APT', command: 'sudo apt install -y torbrowser-launcher', desc: 'Anonim gezinti ve dark web erişimi.', icon: '🧅', selected: true, estMb: 90 },
+            { id: 'media-discord', name: 'Discord', category: 'Medya & Tarayıcı', level: 'Noob', method: 'Snap', command: 'sudo snap install discord', desc: 'Topluluk sesli/yazılı iletişim uygulaması.', icon: '💬', selected: true, estMb: 120 },
+            { id: 'media-vlc', name: 'VLC Media Player', category: 'Medya & Tarayıcı', level: 'Noob', method: 'APT', command: 'sudo apt install -y vlc', desc: 'Tüm formatları oynatan efsanevi medya çalar.', icon: '🎬', selected: true, estMb: 70 },
+            { id: 'media-obs', name: 'OBS Studio', category: 'Medya & Tarayıcı', level: 'Medium', method: 'APT', command: 'sudo apt install -y obs-studio', desc: 'Gelişmiş ekran kaydı ve yayın yazılımı.', icon: '📹', selected: true, estMb: 210 },
+            { id: 'media-gimp', name: 'GIMP', category: 'Medya & Tarayıcı', level: 'Noob', method: 'APT', command: 'sudo apt install -y gimp', desc: 'Photoshop alternatifi açık kaynak görsel düzenleyici.', icon: '🖼️', selected: true, estMb: 240 }
+        ];
+
+        let activeCategoryFilter = 'Tümü';
+        let activeLevelFilter = 'Tümü';
+        let searchQuery = '';
+        let categoryChartInstance = null;
+        let levelChartInstance = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCategoryFilters();
+            renderLevelFilters();
+            renderAppGrid();
+            updateStatsAndCharts();
+            updateScriptOutput();
+
+            document.getElementById('search-input').addEventListener('input', (e) => {
+                searchQuery = e.target.value.toLowerCase().trim();
+                renderAppGrid();
+            });
+        });
+
+        function renderCategoryFilters() {
+            const categories = ['Tümü', ...new Set(appsData.map(a => a.category))].sort();
+            const container = document.getElementById('category-filter-container');
+            container.innerHTML = categories.map(cat => `
+                <button onclick="setCategoryFilter('${cat}')" class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border ${
+                    activeCategoryFilter === cat 
+                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm' 
+                    : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                }">${cat}</button>
+            `).join('');
+        }
+
+        function renderLevelFilters() {
+            const levels = [
+                { id: 'Tümü', label: 'Tüm Seviyeler' },
+                { id: 'Noob', label: '🟢 Noob' },
+                { id: 'Medium', label: '🟡 Medium' },
+                { id: 'Pro', label: '🔴 Pro' }
+            ];
+            const container = document.getElementById('level-filter-container');
+            container.innerHTML = levels.map(lvl => `
+                <button onclick="setLevelFilter('${lvl.id}')" class="px-2.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all border ${
+                    activeLevelFilter === lvl.id
+                    ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
+                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100'
+                }">${lvl.label}</button>
+            `).join('');
+        }
+
+        function setCategoryFilter(category) {
+            activeCategoryFilter = category;
+            renderCategoryFilters();
+            renderAppGrid();
+        }
+
+        function setLevelFilter(level) {
+            activeLevelFilter = level;
+            renderLevelFilters();
+            renderAppGrid();
+        }
+
+        function getFilteredApps() {
+            return appsData.filter(app => {
+                const matchesCat = activeCategoryFilter === 'Tümü' || app.category === activeCategoryFilter;
+                const matchesLvl = activeLevelFilter === 'Tümü' || app.level === activeLevelFilter;
+                const matchesSearch = app.name.toLowerCase().includes(searchQuery) || 
+                                      app.desc.toLowerCase().includes(searchQuery) ||
+                                      app.category.toLowerCase().includes(searchQuery) ||
+                                      app.command.toLowerCase().includes(searchQuery);
+                return matchesCat && matchesLvl && matchesSearch;
+            });
+        }
+
+        function renderAppGrid() {
+            const grid = document.getElementById('apps-grid');
+            const filtered = getFilteredApps();
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center text-slate-400 bg-white rounded-2xl border border-slate-200">
+                        <span class="text-3xl block mb-2">🔍</span>
+                        <p class="text-sm font-medium">Filtrelere uygun uygulama bulunamadı.</p>
+                    </div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(app => `
+                <div class="bg-white rounded-2xl p-4 sm:p-5 border ${app.selected ? 'border-indigo-500 ring-2 ring-indigo-500/10 bg-indigo-50/10' : 'border-slate-200'} hover:border-indigo-300 transition-all flex flex-col justify-between shadow-sm relative group cursor-default">
+                    <div onclick="toggleAppSelection('${app.id}')" class="cursor-pointer">
+                        <div class="flex items-start justify-between gap-3 mb-2">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl p-2 bg-slate-100 rounded-xl flex-shrink-0">${app.icon}</span>
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-900 leading-tight">${app.name}</h4>
+                                    <div class="flex items-center space-x-2 mt-1">
+                                        <span class="text-[10px] font-bold ${getLevelBadgeClass(app.level)}">${app.level}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="checkbox" ${app.selected ? 'checked' : ''} class="w-5 h-5 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500 pointer-events-none mt-1">
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">${app.desc}</p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span class="px-2.5 py-1 rounded-md text-[10px] font-semibold ${getMethodBadgeClass(app.method)}">${app.method}</span>
+                        <button onclick="copySingleCommand('${app.id}', event)" class="text-xs text-slate-500 hover:text-indigo-600 font-medium transition-colors flex items-center space-x-1 z-10">
+                            <span>📋 Komut</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getLevelBadgeClass(level) {
+            switch(level) {
+                case 'Noob': return 'text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded';
+                case 'Medium': return 'text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded';
+                case 'Pro': return 'text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded';
+                default: return 'text-slate-600 bg-slate-50 px-1.5 py-0.5 rounded';
+            }
+        }
+
+        function getMethodBadgeClass(method) {
+            switch(method) {
+                case 'APT': return 'bg-blue-50 text-blue-700 border border-blue-200';
+                case 'Snap': return 'bg-orange-50 text-orange-700 border border-orange-200';
+                case 'Script': return 'bg-purple-50 text-purple-700 border border-purple-200';
+                case 'NPM': return 'bg-red-50 text-red-700 border border-red-200';
+                case 'Ruby': return 'bg-rose-50 text-rose-700 border border-rose-200';
+                default: return 'bg-slate-100 text-slate-700 border border-slate-200';
+            }
+        }
+
+        function toggleAppSelection(id) {
+            const app = appsData.find(a => a.id === id);
+            if (app) {
+                app.selected = !app.selected;
+                renderAppGrid();
+                updateStatsAndCharts();
+                updateScriptOutput();
+            }
+        }
+
+        function selectAllApps(selectStatus) {
+            const visibleApps = getFilteredApps();
+            visibleApps.forEach(app => { app.selected = selectStatus; });
+            renderAppGrid();
+            updateStatsAndCharts();
+            updateScriptOutput();
+        }
+
+        function generateScriptContent() {
+            const selectedApps = appsData.filter(a => a.selected);
+            if (selectedApps.length === 0) return '#!/bin/bash\n# Herhangi bir paket seçilmedi. Lütfen arayüzden paket seçin.';
+
+            let script = `#!/bin/bash\n`;
+            script += `# =========================================================\n`;
+            script += `# OS MASTER DEV KURULUM SCRIPTİ\n`;
+            script += `# Oluşturulma: ${new Date().toLocaleString('tr-TR')}\n`;
+            script += `# Toplam Seçilen: ${selectedApps.length} Uygulama\n`;
+            script += `# NOT: Bu dosya root (sudo) yetkisiyle çalıştırılmalıdır.\n`;
+            script += `# =========================================================\n\n`;
+            script += `set -e\n\necho "🚀 Kurulum süreci başlatılıyor..."\n\n`;
+
+            const categories = [...new Set(selectedApps.map(a => a.category))];
+            
+            categories.forEach(cat => {
+                script += `# ---------------------------------------------------------\n`;
+                script += `# KATEGORİ: ${cat.toUpperCase()}\n`;
+                script += `# ---------------------------------------------------------\n`;
+                
+                const catApps = selectedApps.filter(a => a.category === cat);
+                catApps.forEach(app => {
+                    script += `echo "📦 Kuruluyor: [${app.level}] ${app.name} (${app.method})..."\n`;
+                    script += `${app.command}\n\n`;
+                });
+            });
+
+            // ATILLA YAZILIM / INSTAGRAM DESTEK KISMI
+            script += `echo "✅ Tüm seçilen (${selectedApps.length}) paketin kurulumu başarıyla tamamlandı!"\n\n`;
+            script += `# ---------------------------------------------------------\n`;
+            script += `# YAPIMCI & TEŞEKKÜR \n`;
+            script += `# ---------------------------------------------------------\n`;
+            script += `echo ""\n`;
+            script += `echo "========================================================="\n`;
+            script += `echo "🔥 Tebrikler! Sisteminiz harika bir şekilde yapılandırıldı."\n`;
+            script += `echo "👨‍💻 Bu projeyi geliştiren ve destekleyen: "\n`;
+            script += `echo "📸 Instagram: @atilla_tasdmrr "\n`;
+            script += `echo "========================================================="\n`;
+            script += `echo "Instagram profili açılıyor..."\n`;
+            script += `sleep 2\n\n`;
+
+            script += `# Linux'ta varsayılan tarayıcıyı tetikler\n`;
+            script += `if command -v xdg-open &> /dev/null; then\n`;
+            script += `    xdg-open "https://instagram.com/atilla_tasdmrr" &> /dev/null &\n`;
+            script += `elif command -v sensible-browser &> /dev/null; then\n`;
+            script += `    sensible-browser "https://instagram.com/atilla_tasdmrr" &> /dev/null &\n`;
+            script += `fi\n`;
+
+            return script;
+        }
+
+        function updateScriptOutput() {
+            document.getElementById('script-output').textContent = generateScriptContent();
+        }
+
+        function updateStatsAndCharts() {
+            const selectedCount = appsData.filter(a => a.selected).length;
+            const totalMb = appsData.filter(a => a.selected).reduce((acc, a) => acc + a.estMb, 0);
+
+            const noobCount = appsData.filter(a => a.level === 'Noob' && a.selected).length;
+            const medCount = appsData.filter(a => a.level === 'Medium' && a.selected).length;
+            const proCount = appsData.filter(a => a.level === 'Pro' && a.selected).length;
+
+            document.getElementById('stat-total-apps').textContent = appsData.length;
+            document.getElementById('stat-selected-apps').textContent = selectedCount;
+            document.getElementById('header-selected-count').textContent = `${selectedCount} Paket`;
+            document.getElementById('stat-estimated-size').textContent = `~${(totalMb / 1024).toFixed(1)} GB`;
+            document.getElementById('stat-level-breakdown').textContent = `🟢 ${noobCount} | 🟡 ${medCount} | 🔴 ${proCount}`;
+
+            updateCharts();
+        }
+
+        function updateCharts() {
+            const catMap = {};
+            appsData.forEach(a => { catMap[a.category] = (catMap[a.category] || 0) + 1; });
+            const catLabels = Object.keys(catMap);
+            const catValues = Object.values(catMap);
+
+            const ctxCat = document.getElementById('categoryChart').getContext('2d');
+            if (categoryChartInstance) categoryChartInstance.destroy();
+            categoryChartInstance = new Chart(ctxCat, {
+                type: 'bar',
+                data: {
+                    labels: catLabels.map(l => l.length > 20 ? l.substring(0, 18) + '..' : l),
+                    datasets: [{
+                        label: 'Kütüphanedeki Sayı',
+                        data: catValues,
+                        backgroundColor: '#6366f1',
+                        borderRadius: 4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            const noobT = appsData.filter(a => a.level === 'Noob').length;
+            const medT = appsData.filter(a => a.level === 'Medium').length;
+            const proT = appsData.filter(a => a.level === 'Pro').length;
+
+            const ctxLevel = document.getElementById('levelChart').getContext('2d');
+            if (levelChartInstance) levelChartInstance.destroy();
+            levelChartInstance = new Chart(ctxLevel, {
+                type: 'doughnut',
+                data: {
+                    labels: ['🟢 Noob', '🟡 Medium', '🔴 Pro'],
+                    datasets: [{
+                        data: [noobT, medT, proT],
+                        backgroundColor: ['#10b981', '#f59e0b', '#f43f5e']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            });
+        }
+
+        function copySingleCommand(id, e) {
+            e.stopPropagation();
+            const app = appsData.find(a => a.id === id);
+            if (app) {
+                navigator.clipboard.writeText(app.command).then(() => showToast(`${app.name} kopyalandı!`));
+            }
+        }
+
+        function copyGeneratedScript() {
+            navigator.clipboard.writeText(generateScriptContent()).then(() => showToast('Bash betiği kopyalandı!'));
+        }
+
+        function downloadScriptFile() {
+            const script = generateScriptContent();
+            const blob = new Blob([script], { type: 'text/x-shellscript;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'custom_install.sh';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('custom_install.sh indirildi!');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
+        }
+
+        function scrollToScript() {
+            document.getElementById('script-section').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
+```eof
+
+http://googleusercontent.com/immersive_entry_chip/0
+
+### 2. Kodları Yapıştırın
+Web arayüzünden (`📋 Kopyala` butonuna basarak) aldığınız tüm kodu açılan bu siyah ekrana yapıştırın.
+> _(Kayıt edip çıkmak için: `CTRL + X` tuşlarına basın, ardından `Y` tuşuna basın ve `Enter`'a tıklayın.)_
+
+### 3. Çalıştırma İzni Verin
+Oluşturduğunuz script'in Linux üzerinde çalışabilmesi için yetki vermelisiniz:
+```bash
+chmod +x custom_install.sh
