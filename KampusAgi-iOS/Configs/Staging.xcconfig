@@ -1,0 +1,10 @@
+// Staging environment configuration.
+// No secrets belong in this file — only non-sensitive identifiers/URLs.
+
+API_BASE_URL = https://api-staging.kampusagi.app
+FIREBASE_PROJECT_ID = kampusagi-staging
+GEMINI_TEXT_MODEL = gemini-flash-latest
+GEMINI_EMBEDDING_MODEL = gemini-embedding-latest
+GOOGLE_SIGN_IN_CLIENT_ID = REPLACE_WITH_STAGING_GOOGLE_CLIENT_ID
+GOOGLE_SIGN_IN_URL_SCHEME = REPLACE_WITH_STAGING_GOOGLE_REVERSED_CLIENT_ID
+APP_ENVIRONMENT_NAME = staging
