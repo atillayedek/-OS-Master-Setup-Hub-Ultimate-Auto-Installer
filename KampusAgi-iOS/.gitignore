@@ -1,0 +1,16 @@
+.DS_Store
+build/
+DerivedData/
+*.xcodeproj
+*.xcworkspace
+!default.xcworkspace
+xcuserdata/
+.swiftpm/
+Packages/
+Package.resolved
+
+# Real Firebase config files are environment-specific and must not be committed.
+# Replace GoogleService-Info.plist.template with the real file from the
+# Firebase console locally / in CI secrets, per environment.
+GoogleService-Info.plist
+GoogleService-Info-*.plist
